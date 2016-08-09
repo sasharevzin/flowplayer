@@ -3,7 +3,7 @@
   <% @videos.each do |video| %>
   <div class="col-xs-6 col-md-3">
     Video #<%= video.id %>
-    <%= link_to(image_tag(video.thumb), video, class: 'thumbnail', data: { toggle: 'modal', target: '#player-dialog' }) %>
+    <%= link_to(image_tag(video.thumb), '#', class: 'thumbnail', data: { id: video.id, url: video.url, toggle: 'modal', target: '#player-dialog' }) %>
   </div>
   <% end %>
 </div>
@@ -11,13 +11,39 @@
 <div id="player-dialog" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      loading...
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Video #<span id="video-id"></span></h4>
+      </div>
+      <div class="modal-body">
+        <div id="player"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
     </div>
   </div>
 </div>
 
 <script type="text/javascript">
   $(function(){
+    // select the above element as player container
+    var container = document.getElementById("player");
+    var player_api = null;
+
+    $('.thumbnail').click(function (e) {
+      player_api = flowplayer(container, {
+        clip: {
+          sources: [{
+            type: "video/mp4",
+            src:  $(this).data('url')
+          }]
+        }
+      });
+      $('#video-id').text($(this).data('id'));
+    });
+
     $('#player-dialog').on('hidden.bs.modal', function (e) {
       if(player_api){
         // stop player and clean html
