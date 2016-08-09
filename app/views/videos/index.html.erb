@@ -1,0 +1,29 @@
+<h2>Videos</h2>
+<div class="row">
+  <% @videos.each do |video| %>
+  <div class="col-xs-6 col-md-3">
+    Video #<%= video.id %>
+    <%= link_to(image_tag(video.thumb), video, class: 'thumbnail', data: { toggle: 'modal', target: '#player-dialog' }) %>
+  </div>
+  <% end %>
+</div>
+
+<div id="player-dialog" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      loading...
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(function(){
+    $('#player-dialog').on('hidden.bs.modal', function (e) {
+      if(player_api){
+        // stop player and clean html
+        player_api.stop();
+        //$('.modal-content', this).empty();
+      }
+    });
+  })
+</script>
