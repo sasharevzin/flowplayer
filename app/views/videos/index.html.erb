@@ -34,21 +34,21 @@
 
     $('.thumbnail').click(function (e) {
       player_api = flowplayer(container, {
+        splash: true,
         clip: {
           sources: [{
             type: "video/mp4",
             src:  $(this).data('url')
           }]
         }
-      });
+      }).load();
       $('#video-id').text($(this).data('id'));
     });
 
     $('#player-dialog').on('hidden.bs.modal', function (e) {
       if(player_api){
         // stop player and clean html
-        player_api.stop();
-        //$('.modal-content', this).empty();
+        player_api.shutdown();
       }
     });
   })
